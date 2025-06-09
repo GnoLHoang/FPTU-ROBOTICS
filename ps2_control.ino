@@ -11,8 +11,8 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 SimpleServo myServo;
 
 int servoAngle = 90;
-unsigned long pressed_time;
-unsigned long released_time;
+// unsigned long pressed_time;
+// unsigned long released_time;
 unsigned long lastInputTime;
 
 void setServo(uint8_t channel, uint16_t pulse) {
