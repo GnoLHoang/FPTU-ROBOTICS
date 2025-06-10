@@ -52,29 +52,29 @@ void loop() {
 
   // Movement
   if (ps2x.Button(PSB_PAD_LEFT)) {    // LEFT
-    lastInputTime = millis();
+    lastInputTime = micros();
     anyPressed = true;
     right_speed += 1000;
   }
   if (ps2x.Button(PSB_PAD_RIGHT)) {   // RIGHT
-    lastInputTime = millis();
+    lastInputTime = micros();
     anyPressed = true;
     left_speed -= 1000;
   }
   if (ps2x.Button(PSB_PAD_UP)) {      // UP
-    lastInputTime = millis();
+    lastInputTime = micros();
     anyPressed = true;
     left_speed -= 2000;
     right_speed += 2000;
   }
   if (ps2x.Button(PSB_PAD_DOWN)) {    // DOWN
-    lastInputTime = millis();
+    lastInputTime = micros();
     anyPressed = true;
     left_speed += 2000;
     right_speed -= 2000;
   }
 
-  if (!anyPressed && (millis() - lastInputTime > 500)) { // Set speed to 0 when no input for more than 500ms
+  if (!anyPressed && (micros() - lastInputTime > 500)) { // Set speed to 0 when no input for more than 500ms
     left_speed = 0;
     right_speed = 0;
   }
