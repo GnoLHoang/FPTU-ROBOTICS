@@ -1,8 +1,8 @@
-#include <PS2X_lib.h>
-#include <Adafruit_PWMServoDriver.h>
-#include <Wire.h>
-#include <MotorDriver.h>
-#include <Servo.h>
+#include "PS2X_lib.h"
+#include "Adafruit_PWMServoDriver.h"
+#include "Wire.h"
+#include "MotorDriver.h"
+#include "Servo.h"
 
 // Initialization
 PS2X ps2x;
@@ -11,11 +11,10 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 SimpleServo myServo;
 
 int servoAngle = 90;
-unsigned long pressed_time;
-unsigned long released_time;
 unsigned long lastInputTime;
 int left_speed = 0;
 int right_speed = 0;
+
 
 void setServo(uint8_t channel, uint16_t pulse) {
   pwm.setPWM(channel, 0, pulse);
