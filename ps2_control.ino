@@ -21,18 +21,17 @@ void setServo(uint8_t channel, uint16_t pulse) {
 }
 
 void deceleration(int speed) {
-    const int step = 1000;
-
-    if (speed > 0) {
-        speed -= step;
-        if (speed < 0) speed = 0;
-    } else if (speed < 0) {
-        speed += step;
-        if (speed > 0) speed = 0;
-    }
-    return speed;
+  const int step = 1000;
+  if (speed > 0) {
+       speed -= step;
+       if (speed < 0) speed = 0;
+   } else if (speed < 0) {
+       speed += step;
+       if (speed > 0) speed = 0;
+   }
+   return speed;
 }
-
+  
 void setup() {
   Serial.begin(115200);
 
@@ -86,6 +85,9 @@ void loop() {
     right_speed -= 300;
   }
 
+  left_speed = constrain(left_speed, -4095, 4095)
+	right_speed = constrain(right_speed, -4095, 4095)
+    
   if (!anyPressed && (millis() - lastInputTime > 500)) { // Reduce speed to 0 when idling for more than 500ms
     left_speed = deceleration(left_speed)
     right_speed = deceleration(right_speed)
