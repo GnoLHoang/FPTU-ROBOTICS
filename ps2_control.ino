@@ -11,12 +11,26 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 SimpleServo myServo;
 
 int servoAngle = 90;
-// unsigned long pressed_time;
-// unsigned long released_time;
 unsigned long lastInputTime;
+int left_speed = 0;
+int right_speed = 0;
+
 
 void setServo(uint8_t channel, uint16_t pulse) {
   pwm.setPWM(channel, 0, pulse);
+}
+
+void deceleration(int speed) {
+    const int step = 1000;
+
+    if (speed > 0) {
+        speed -= step;
+        if (speed < 0) speed = 0;
+    } else if (speed < 0) {
+        speed += step;
+        if (speed > 0) speed = 0;
+    }
+    return speed;
 }
 
 void setup() {
@@ -43,8 +57,6 @@ void setup() {
 
 void loop() {
   bool anyPressed = false;
-  int left_speed = 0;
-  int right_speed = 0;
   ps2x.read_gamepad(false, false);
 
   // Đọc joystick trái (điều khiển motor tiến/lùi)
@@ -52,35 +64,35 @@ void loop() {
 
   // Movement
   if (ps2x.Button(PSB_PAD_LEFT)) {    // LEFT
-    lastInputTime = micros();
+    lastInputTime = millis();
     anyPressed = true;
-    right_speed += 1000;
+    right_speed += 400;
   }
   if (ps2x.Button(PSB_PAD_RIGHT)) {   // RIGHT
-    lastInputTime = micros();
+    lastInputTime = millis();
     anyPressed = true;
-    left_speed -= 1000;
+    left_speed -= 400;
   }
   if (ps2x.Button(PSB_PAD_UP)) {      // UP
-    lastInputTime = micros();
+    lastInputTime = millis();
     anyPressed = true;
-    left_speed -= 2000;
-    right_speed += 2000;
+    left_speed -= 300;
+    right_speed += 300;
   }
   if (ps2x.Button(PSB_PAD_DOWN)) {    // DOWN
-    lastInputTime = micros();
+    lastInputTime = millis();
     anyPressed = true;
-    left_speed += 2000;
-    right_speed -= 2000;
+    left_speed += 300;
+    right_speed -= 300;
   }
 
-  if (!anyPressed && (micros() - lastInputTime > 500)) { // Set speed to 0 when no input for more than 500ms
-    left_speed = 0;
-    right_speed = 0;
+  if (!anyPressed && (millis() - lastInputTime > 500)) { // Reduce speed to 0 when idling for more than 500ms
+    left_speed = deceleration(left_speed)
+    right_speed = deceleration(right_speed)
   }
 
   motor.setMotorSpeed(0, 0, left_speed, right_speed); // Execute
-  delay(50); // Prevent command spam and reduce risk
+  //delay(50); No longer required, best to add to reduce serial speed for debugging
   
 
   //Servo điều khiển bằng joystick phải trục X
